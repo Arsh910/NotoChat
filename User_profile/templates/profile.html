@@ -1,0 +1,735 @@
+{%extends 'base.html'%}
+{%load static%}
+
+{%block content%}
+
+<!-- <style>
+
+@import url("https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap");
+
+
+
+a {
+  text-decoration: none;
+}
+
+
+.header {
+  width: 100%;
+  min-height: calc(100px + 15vw);
+  background-repeat: no-repeat;
+
+  
+}
+
+.header__wrapper .cols__container .left__col {
+  padding: 25px 20px;
+  text-align: center;
+  max-width: 350px;
+  position: relative;
+  margin: 0 auto;
+}
+
+.header__wrapper .cols__container .left__col h2 {
+  margin-top: 60px;
+  font-weight: 600;
+  font-size: 22px;
+  margin-bottom: 5px;
+}
+.header__wrapper .cols__container .left__col p {
+  font-size: 0.9rem;
+  color: #818181;
+  margin: 0;
+}
+.header__wrapper .cols__container .left__col .about {
+  display: flex;
+  justify-content: space-between;
+  position: relative;
+  margin: 35px 0;
+}
+.header__wrapper .cols__container .left__col .about li {
+  
+  flex-direction: column;
+  color: #818181;
+  font-size: 0.9rem;
+}
+.header__wrapper .cols__container .left__col .about li span {
+  color: #1d1d1d;
+  font-weight: 600;
+}
+.header__wrapper .cols__container .left__col .about:after {
+  position: absolute;
+  content: "";
+  bottom: -16px;
+  display: block;
+  background: #cccccc;
+  height: 1px;
+  width: 100%;
+}
+.header__wrapper .cols__container .content p {
+  font-size: 1rem;
+  color: #1d1d1d;
+  line-height: 1.8em;
+}
+.header__wrapper .cols__container .content ul {
+  gap: 30px;
+  justify-content: center;
+  align-items: center;
+  margin-top: 25px;
+}
+.header__wrapper .cols__container .content ul li {
+  display: flex;
+}
+.header__wrapper .cols__container .content ul i {
+  font-size: 1.3rem;
+}
+.header__wrapper .cols__container .right__col nav {
+  display: flex;
+  align-items: center;
+  padding: 30px 0;
+  justify-content: space-between;
+  flex-direction: column;
+}
+.header__wrapper .cols__container .right__col nav ul {
+  display: flex;
+  gap: 20px;
+  flex-direction: column;
+}
+.header__wrapper .cols__container .right__col nav ul li a {
+  text-transform: uppercase;
+  color: #818181;
+}
+.header__wrapper .cols__container .right__col nav ul li:nth-child(1) a {
+  color: #1d1d1d;
+  font-weight: 600;
+}
+.header__wrapper .cols__container .right__col nav button {
+  background: #0091ff;
+  color: #fff;
+  border: none;
+  padding: 10px 25px;
+  border-radius: 4px;
+  cursor: pointer;
+  margin-top: 20px;
+}
+.header__wrapper .cols__container .right__col nav button:hover {
+  opacity: 0.8;
+}
+.header__wrapper .cols__container .right__col .photos {
+  display: flex;
+  width: 100%;
+  gap: 2px;
+}
+.header__wrapper .cols__container .right__col .photos img {
+  max-width: 100%;
+  display: block;
+  height: 100%;
+  object-fit: cover;
+}
+
+/* Responsiveness */
+
+@media (min-width: 868px) {
+  .header__wrapper .cols__container {
+    max-width: 1200px;
+    margin: 0 auto;
+    width: 100%;
+    justify-content: space-between;
+    display: grid;
+    grid-template-columns: 1fr 2fr;
+    gap: 50px;
+  }
+  .header__wrapper .cols__container .left__col {
+    padding: 25px 0px;
+  }
+  .header__wrapper .cols__container .right__col nav ul {
+    flex-direction: row;
+    gap: 30px;
+  }
+  .header__wrapper .cols__container .right__col .photos {
+    height: 365px;
+    overflow: auto;
+    width: 100%;
+    padding: 0 0 30px;
+  }
+}
+
+@media (min-width: 1017px) {
+  .header__wrapper .cols__container .left__col {
+    margin: 0;
+    margin-right: auto;
+  }
+  .header__wrapper .cols__container .right__col nav {
+    flex-direction: row;
+  }
+  .header__wrapper .cols__container .right__col nav button {
+    margin-top: 0;
+  }
+}
+
+/* cardss */
+
+*,
+*::before,
+*::after { 
+  box-sizing: border-box;
+}
+
+img {
+  height: auto;
+  max-width: 100%;
+  vertical-align: middle;
+}
+
+.btn {
+  background-color: white;
+  border: 1px solid #cccccc;
+  color: #696969;
+  padding: 0.5rem;
+  text-transform: lowercase;
+}
+
+.btn--block {
+  display: block;
+  width: 100%;
+}
+ 
+.cards {
+  flex-wrap: wrap;
+  list-style: none;
+  border: 2px solid orange;
+  margin: 0;
+  padding: 0;
+  height: fit-content;
+}
+
+.cards__item {
+  display: flex;
+  padding: 1rem;
+  height: fit-content;
+  width: 100%;
+  @media(min-width: 40rem) {
+    width: 100%;
+  }
+  @media(min-width: 53em) {
+    width: 100%;
+  }
+}
+
+.card {
+  background-color: white;
+  border-radius: 0.25rem;
+  box-shadow: 0 20px 40px -14px rgba(0,0,0,0.25);
+  overflow: hidden;
+}
+
+.card__content {
+  display: flex;
+  flex: 1 1 auto;
+  flex-direction: column;
+  padding: 1rem;
+}
+
+.card__image {
+  background-position: center center;
+  background-repeat: no-repeat;
+  background-size: cover;
+  border-top-left-radius: 0.25rem;
+  border-top-right-radius: 0.25rem;
+  filter: contrast(70%);
+  overflow: hidden;
+  position: relative;
+  transition: filter 0.5s cubic-bezier(.43,.41,.22,.91);;
+  &::before {
+    content: "";
+	  display: block;
+    padding-top: 56.25%; 
+  }
+  @media(min-width: 40rem) {
+    &::before {
+      padding-top: 66.6%;
+    }
+  }
+}
+
+.card__title {
+  color: #696969;
+  font-size: 1.25rem;
+  font-weight: 300;
+  letter-spacing: 2px;
+  text-transform: uppercase;
+}
+
+.card__text {
+  flex: 1 1 auto;
+  font-size: 0.875rem;
+  line-height: 1.5;
+  margin-bottom: 1.25rem;
+}
+
+</style>
+
+<div class="header__wrapper" style="margin-top: 130px;">
+  <div class="cols__container">
+    <div class="left__col">
+      <div class="img__container">
+        {% if auth.prof_image %}
+        <img src="/media/{{auth.prof_image}}"  style="overflow: hidden; border:3px solid red; border-radius: 50%; overflow: hidden; width:200px;height:200px; margin: 0 auto 0 auto;" alt="{{auth.first_name}} {{auth.last_name}}">
+
+        {%endif%}
+        <span></span>
+      </div>
+          <h2>{{auth.first_name}} {{auth.last_name}}</h2>
+          <p>{{auth.college}}</p>
+          <p>{{auth.bio}}</p>
+          <p>{{auth.id}}</p>
+          {% if auth.hide_email == False %}
+          <p>{{auth.email}}</p>
+          {% else %}
+          <p title="Email hidden">************</p>
+          {%endif%}
+    </div>
+    {%if request.user == auth%}
+    <div style="font-size: 50px; text-align: center;">
+        <a href="/new_groupchat" style="font-size: 50px;">create chatroom</a>
+        <br>
+        <div style="font-size: 50px; text-align: center;">
+          <h1 style="font-size: 50px; text-align: center;">create video chatroom</h1>
+            <form action="/video/" style="margin: 0 auto 0 auto;" method="post">
+                {% csrf_token %}
+                <input type="text" name="name" id="" style="height: 30px; width: 30%;">
+                <Button type="submit">Submit</Button>
+            </form>
+        </div>
+        <br>
+        <div style="font-size: 50px; text-align: center;">
+          <a href="/testing">
+            <h1 style="font-size: 50px;">testing video chat</h1>
+          </a>
+        </div>
+      </div>
+      {%else%}
+      {%if auth in list%}
+      <div>
+        <Button id="follow_btn" type="button">unfollow</Button>
+      </div>
+      {%else%}
+      <div>
+        <Button id="follow_btn" type="button">follow</Button>
+         <br>
+        <Button id="cancel_btn" type="button">cancel</Button>
+      </div>
+      {%endif%}
+      {%endif%} 
+  </div>
+</div>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.js"></script>
+
+<script>
+
+payload = {
+            'csrfmiddlewaretoken' : '{{csrf_token}}',
+  }
+
+$('#follow_btn').click(function() {
+    $.ajax({
+      type: "POST",
+      url: "/send_follow/{{auth.username}}/",
+      data: payload,
+      dataType: "json",
+      success: function (response) {
+        console.log(response)
+        toastr.info(`${response}`)
+      }
+    });
+  
+  });
+
+  $('#cancel_btn').click(function(){ 
+    $.ajax({
+      type: "POST",
+      url: "/cancel_follow/{{auth.username}}/",
+      data: payload,
+      dataType: "json",
+      success: function (response){
+        console.log(response)
+        toastr.info(`${response}`)
+      }
+    });
+  });
+
+</script> -->
+
+<style>
+
+:root {
+    --primary-bg: #171717;
+    --secondary-bg: #262626;
+    --accent-bg: #4f46e5;
+
+    --primary-color: #fff;
+    --secondary-color: rgba(255,255,255, 70%);
+    --accent-color: #818cf8;
+
+    --border-color: rgba(255,255,255, 30%);
+    
+    --username-size: 32px;
+    --title-size: 28px;
+    --subtitle: 24px;
+}
+
+
+
+.profile-card {
+    width: 100%;
+    background-color: var(--primary-bg);
+    border: 2px solid var(--accent-bg);
+
+    display: grid;
+    grid-template-rows: 220px auto;
+    overflow: auto;
+}
+/* ------ profile header section */
+.profile-header {
+    background: url('/static/banner1.jpg') center;
+    background-size: cover;
+    margin: 10px;
+    position: relative;
+}
+    .main-profile {
+        display: flex;
+        align-items: center;
+        position: absolute;
+        inset: calc(100% - 75px) auto auto 70px;
+    }
+        .profile-image {
+            z-index: 2;
+            width: 150px;
+            height: 150px;
+            background: url('/media/{{auth.prof_image}}') center;
+            background-size: cover;
+            border-radius: 50%;
+            border: 10px solid var(--primary-bg);
+        }
+        .profile-names {
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            color: var(--primary-color);
+            background-color: var(--primary-bg);
+            padding: 10px 30px;
+            border-radius:  50px ;
+            border-bottom: 8px solid white;
+            transform: translateX(-10px);
+        }
+            .page-title {
+                color: var(--secondary-color);
+            }
+
+/* ------- profile body header */
+.profile-body {
+    display: grid;
+    grid-template-columns: 150px auto;
+    gap: 70px;
+    padding: 70px;
+}
+    .profile-actions {
+        display: grid;
+        grid-template-rows: repeat(2, max-content) auto;
+        gap: 10px;
+        margin-top: 30px;
+    }
+    .profile-actions button {
+        all: unset;
+        padding: 10px;
+        color: var(--primary-color);
+        border: 2px solid var(--accent-bg);
+        text-align: center;
+        border-radius: 10px;
+    }
+        .profile-actions .follow 
+        {background-color: var(--accent-bg);
+          cursor: pointer;
+        }
+    .bio {
+        color: var(--primary-color);
+        background-color: var(--secondary-bg);
+        display: flex;
+        flex-direction: column;
+        gap: 10px;
+        padding: 10px;
+        border-radius: 10px;
+    }
+        .bio-header {
+            display: flex;
+            gap: 10px;
+            border-bottom: 1px solid var(--border-color);
+            color: var(--secondary-color);
+        }
+    .account-info {
+        display: grid;
+        grid-template-columns: repeat(3, 1fr);
+        grid-template-rows: 2fr 1fr;
+        gap: 20px;
+    }
+        .data {
+            grid-area: 1/1/2/3;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            color: var(--secondary-color);
+            padding: 30px;
+            text-align: center;
+            border: 1px solid var(--border-color);
+            border-radius: 15px;
+        }
+            .important-data {
+                display: flex;
+                justify-content: space-between;
+                align-items: center;
+            }
+            .other-data {
+                display: flex;
+                justify-content: space-between;
+                align-items: center;
+
+                background-color: var(--secondary-bg);
+                padding: 15px;
+                border-radius: 10px;
+            }
+            .data-item .value {
+                color: var(--accent-color);
+            }
+                .important-data .value {
+                    font-size: var(--title-size);
+                }
+                .other-data .value {
+                    font-size: var(--subtitle);
+                }
+        .social-media {
+            grid-area: 2/1/3/3;
+            background-color: var(--secondary-bg);
+            color: var(--secondary-color);
+            padding: 15px;
+            border-radius: 10px;
+
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+            .media-link {
+                text-decoration: none;
+                color: var(--accent-color);
+                font-size: var(--subtitle);
+            }
+        .last-post {
+            grid-area: 1/3/3/4;
+            border: 1px solid var(--border-color);
+            background-color: var(--secondary-bg);
+            border-radius: 10px;
+            padding: 10px;
+
+            display: grid;
+            grid-template-rows: 70% auto max-content;
+            gap: 10px;
+        }
+            .post-cover {
+                position: relative;
+                background: url('/images/last-post.jpg') center;
+                background-size: cover;
+                border-radius: 5px;
+            }
+                .last-badge {
+                    position: absolute;
+                    inset: 3px 3px auto auto;
+                    background-color: rgba(0,0,0, 70%);
+                    color: var(--primary-color);
+                    padding: 5px;
+                    border-radius: 3px;
+                }
+            .post-title {
+                color: var(--primary-color);
+                font-size: 18px;
+            }
+            .post-CTA {
+                all: unset;
+                text-align: center;
+                border: 1px solid var(--accent-color);
+                color: var(--accent-color);
+                border-radius: 5px;
+                padding: 5px;
+            }
+
+/* ------------ media queries */
+@media screen and (max-width: 950px) {
+    .last-post {
+        display: none;
+    }
+    .data, .social-media {
+        grid-column: 1/4;
+    }
+}
+
+
+@media screen and (max-width: 768px) {
+    .profile-card {
+        height: 100%;
+        border-radius: 0;
+    }
+        .profile-header {
+            border-radius: 0;
+        }
+            .main-profile {
+                inset: calc(100% - 75px) auto auto 50%;
+                transform: translateX(-50%);
+
+                flex-direction: column;
+                text-align: center;
+            }
+                .profile-names {transform: translateX(0)}
+        .profile-body {
+            grid-template-columns: 1fr;
+            gap: 20px;
+        }
+            .profile-actions {
+                grid-template-columns: repeat(2, 1fr);
+                margin-top: 90px;
+            }
+                .bio {grid-column: 1/3;}
+
+            .data {gap: 20px;}
+}
+</style>
+
+
+
+<div class="profile-card">
+          <div class="profile-header"><!-- profile header section -->
+              <div class="main-profile">
+                  <div class="profile-image" style="border-color: white;"></div>
+                  <div class="profile-names">
+                      <h3 class="username">{{auth.first_name}}</h3>
+                      <small class="page-title">{{auth.username}}</small>
+                  </div>
+              </div>
+          </div>
+
+          <div class="profile-body"><!-- profile body section -->
+              <div class="profile-actions">
+                  {%if auth == request.user%}
+                  <a href="/testing" class="media-link" style="margin: 0 auto 0 auto;">
+                  <button class="follow" id="follow_btn" type="button" >Meet new people</button>
+                  </a>
+                  {%else%}
+                  {%if auth in list%}  
+                  <button class="follow" id="follow_btn">Unfollow</button>
+                  <button class="message">Message</button>
+                  {%else%}
+                  <button class="follow" id="follow_btn" type="button">Follow</button>
+                  <button class="follow" id="cancel_btn" type="button" style="color: red;">Cancel</button>
+                  {%endif%}
+                  {%endif%}
+                  <section class="bio">
+                      <div class="bio-header">
+                          <i class="fa fa-info-circle"></i>
+                          Bio
+                      </div>
+                      <p class="bio-text">
+                          Lorem ipsum dolor, sit amet consectetur adipisicing elit.
+                      </p>
+                  </section>
+              </div>
+
+              <div class="account-info">
+                  <div class="data">
+                      <div class="important-data">
+                          <section class="data-item">
+                              <h3 class="value">104</h3>
+                              <small class="title">Post</small>
+                          </section>
+                          <section class="data-item">
+                              <h3 class="value">21K</h3>
+                              <small class="title">Follower</small>
+                          </section>
+                          </section>
+                          <section class="data-item">
+                              <h3 class="value">{{count}}</h3>
+                              <small class="title">Following</small>
+                          </section>
+                      </div>
+                      <div class="other-data">
+                          <section class="data-item">
+                              <h3 class="value">41K</h3>
+                              <small class="title">Likes</small>
+                          </section>
+                          <section class="data-item">
+                              <h3 class="value">12K</h3>
+                              <small class="title">Comments</small>
+                          </section>
+                          <section class="data-item">
+                              <h3 class="value">2K</h3>
+                              <small class="title">Saved</small>
+                          </section>
+                      </div>
+                  </div>
+
+                  <div class="social-media">
+                      <a href="/new_groupchat" style="color: white;">create chatroom</a>                      <a href="https://www.instagram.com/mammad.sahragard/" class="media-link"><i class="fab fa-instagram-square"></i></a>
+                      <a href="/new_groupchat" style="color: white;">create video chatroom</a> 
+                  </div>
+
+                  <div class="last-post">
+                      <div class="post-cover">
+                          <span class="last-badge">Last Post</span>
+                      </div>
+                      <h3 class="post-title">3D layer</h3>
+                      <button class="post-CTA">View</button>
+                  </div>
+              </div>
+          </div>
+</div>
+
+<script>
+
+  $('#cancel_btn').hide();
+
+  payload = {
+              'csrfmiddlewaretoken' : '{{csrf_token}}',
+    }
+  
+  $('#follow_btn').click(function() {
+      $.ajax({
+        type: "POST",
+        url: "/send_follow/{{auth.username}}/",
+        data: payload,
+        dataType: "json",
+        success: function (response) {
+          console.log(response)
+          toastr.info(`${response}`);
+          $('#follow_btn').hide();
+          $('#cancel_btn').show();
+        }
+      });
+    
+    });
+    
+    $('#cancel_btn').click(function(){ 
+      $.ajax({
+        type: "POST",
+        url: "/cancel_follow/{{auth.username}}/",
+        data: payload,
+        dataType: "json",
+        success: function (response){
+          console.log(response)
+          toastr.info(`${response}`)
+          $('#follow_btn').show();
+          $('#cancel_btn').hide();
+        }
+      });
+    });
+  
+  </script>
+
+
+{%endblock%}

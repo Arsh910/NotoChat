@@ -1,0 +1,187 @@
+{%extends 'base.html'%}
+{%load static%}
+
+{%block button%}
+  <button type="button" id="sidebarCollapse" style="margin: 0 0 0 10px; width:40px; background-color: transparent;">
+      <img src="{%static 'right.png'%}" alt="" width="100%">
+  </button>
+{%endblock%}
+
+{%block content%}
+
+<style>
+  .ro:hover{
+    background: linear-gradient(145deg, #8c8b8e, #a7a5a9);
+  }
+
+  .main {
+  background-color: white;
+  border-radius: 15px;
+  width: 100%;
+}
+</style>
+
+<script src="https://unpkg.com/htmx.org@1.9.12" integrity="sha384-ujb1lZYygJmzgSwoxRggbCHcjc0rB2XoQrxeTUQyRjrOnlCoYta87iKBWq3EsdM2" crossorigin="anonymous"></script>
+<script src="https://unpkg.com/htmx.org@1.9.12/dist/htmx.js" integrity="sha384-qbtR4rS9RrUMECUWDWM2+YGgN3U4V4ZncZ0BvUcg9FGct0jqXz3PUdVpU1p0yrXS" crossorigin="anonymous"></script>
+<script src="https://unpkg.com/htmx.org@1.9.12/dist/ext/ws.js"></script>
+<link rel= "stylesheet" type= "text/css" href= "{% static 'chat/css/chat.css'%}">
+
+<div id="blur" style="height: fit-content;">
+    <div class="chat-page" style="height:100vh;">
+        <div class="" style="display: flex;">
+  
+            <div style="margin: 0;">  
+              
+              <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
+              <link rel="stylesheet" href="{%static 'side/css/style.css' %}">
+              
+              <div class="wrapper d-flex align-items-stretch">
+                
+                <nav id="sidebar" class="active" 
+                style="background-color: black;">
+
+                  <ul class="list-unstyled components mb-5" style="margin-top: 140px; height: 80vh; overflow: scroll; overflow-x: hidden; scrollbar-width: none;">
+                    
+                    <li class="ro main" style="border-top:2px solid black; border-bottom: 2px solid black;">
+                      <a href="/chathome/{{request.user.username}}" style="color: black; display: flex; flex-wrap: wrap; justify-content: space-around; transition: all 1s ease-in-out;">
+                        <img src="{%static 'logo.png'%}"  style="overflow: hidden; border:3px solid red; border-radius: 50%; overflow: hidden; width:40px;height:40px;" alt="">
+                        <div style="color: black;  text-align: center; flex-basis: 50%; ">
+                          Home
+                        </div>
+                      </a>
+                  </li>
+
+                    {%for g in groupchats%}
+                    
+                    {%if g.is_private%}
+
+                    {%else%}
+                    
+                    {%if g.group_name == chatroom%}
+
+                    <li class="main" style="border-top:2px solid black; border-bottom: 2px solid black; background-color: blue;">
+                      <a href="/chat/room/{{g.group_name}}" style="color: black; display: flex; flex-wrap: wrap; justify-content: space-around; transition: all 1s ease-in-out;">
+                        {%if g.prof_image%}
+                        <img src="/media/{{g.prof_image}}"  style="overflow: hidden; border:3px solid red; border-radius: 50%; overflow: hidden; width:40px;height:40px; margin: 0 auto 0 auto;" alt="">
+                        {%else%}
+                        <img src="{%static 'people.png'%}"  style="overflow: hidden; border:3px solid red; border-radius: 50%; overflow: hidden; width:40px;height:40px; margin: 0 auto 0 auto;" alt="">
+                        {%endif%}
+                        <div style="color: black;  text-align: center; flex-basis: 70%; ">
+                            {{g.groupchat_name}}
+                            <span id="online-count">
+                            </span>
+                        </div>
+                        </a>
+                      </li>
+                    {%else%}
+                    <li class="ro main" style="border-top:2px solid black; border-bottom: 2px solid black;">
+                      <a href="/chat/room/{{g.group_name}}" style="color: black; display: flex; flex-wrap: wrap; justify-content: space-around; transition: all 1s ease-in-out;">
+                        {%if g.prof_image%}
+                        <img src="/media/{{g.prof_image}}"  style="overflow: hidden; border:3px solid red; border-radius: 50%; overflow: hidden; width:40px;height:40px; margin: 0 auto 0 auto;" alt="">
+                        {%else%}
+                        <img src="{%static 'people.png'%}"  style="overflow: hidden; border:3px solid red; border-radius: 50%; overflow: hidden; width:40px;height:40px; margin: 0 auto 0 auto;" alt="">
+                        {%endif%}
+                        <div style="color: black;  text-align: center; flex-basis: 70%;">
+                            {{g.groupchat_name}}
+                          </div>
+                        </a>
+                      </li>
+                      
+                    {%endif%}
+                    {%endif%}
+                    {%endfor%}
+                    
+                    {%for r in room%}
+                    {%if r.chat.group_name == chatroom%}
+                    <li class="main" style="border-top:2px solid black; border-bottom: 2px solid black; background-color: blue;">
+                      <a href="/chat/room/{{r.chat.group_name}}" style="color: black; display: flex; flex-wrap: wrap; justify-content: space-around; transition: all 1s ease-in-out;">
+                        <img src="/media/{{r.c.prof_image}}"  style="overflow: hidden; border-radius: 50%; overflow: hidden; width:40px;height:40px; margin: 0 auto 0 auto;" alt="">  
+                        <div style="color: black;  text-align: center; flex-basis: 70%;  ">
+                          {{r.c.username}}
+                        </div>
+                      </a>
+                    </li>
+                    {%else%}
+                    <li class="ro main" style="border-top:2px solid black; border-bottom: 2px solid black;">
+                      <a href="/chat/room/{{r.chat.group_name}}" style="color: black; display: flex; flex-wrap: wrap; justify-content: space-around; transition: all 1s ease-in-out;">
+                        <img src="/media/{{r.c.prof_image}}"  style="overflow: hidden;  border-radius: 50%; overflow: hidden; width:40px;height:40px; margin: 0 auto 0 auto;" alt="">
+                        <div style="color: black;  text-align: center; flex-basis: 70%; ">
+                          {{r.c.username}}
+                        </div>
+                      </a>
+                    </li>
+                    {%endif%}
+                    {%endfor%}
+                  </ul>
+                </nav>
+
+                <!-- Page Content  -->
+                <div id="content" >       
+                </div>
+              </div>
+             
+              <script src="{%static 'side/js/main.js'%}"></script>
+            
+            </div>
+
+            <div class="chat-section" style="flex-basis:100vw;">
+                <div class="main-block">
+                    
+                    <div class="chats d-flex flex-column" id="chats" style="height: 68vh; padding-top: 5vh; padding-bottom: 5vh; margin-top: 10vh;">
+
+                                {% for data in mesg reversed%}
+                                {%include 'chatmess.html'%}
+                                {%endfor%}
+                    </div>
+                    <br>
+                    <div class="send-message-container" style="margin:0;">
+                      <form action="" style="width: 100%; display: flex; justify-content: space-between;" hx-ext="ws" 
+                      ws-connect="/ws/chatroom/{{chatroom}}"   
+                      ws-send 
+                      _=" on htmx:wsAfterSend reset() me" >
+                      {% csrf_token %}
+                        <input id="m_input" class="message-input"  name="message" type="text" placeholder="Add message ..." width="100%">
+                        <button id="my_button" type="submit" style="flex-basis: 20%; border-radius: 10px;" class="bg-blue-500 text-white font-bold py-2 px-4 border-b-4 border-blue-700 ">Send</button>
+                      </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>    
+</div>
+
+
+<script>
+    function scrollToBottom() {
+        var $chatContainer = $('#chats');
+        $chatContainer.scrollTop($chatContainer[0].scrollHeight);
+    }
+
+    function disable_button(){ 
+        $('#my_button').prop("disabled",true);
+        $('#my_button').css(
+          "background-color", "gray"
+        );
+     }
+
+    function enable_button(){
+        $('#my_button').prop("disabled",false);
+        $('#my_button').css(
+          "background-color", "blue"
+        );
+    }
+    
+    $(document).ready(function () {
+        scrollToBottom();
+        disable_button();
+        $('#m_input').keyup(()=>{
+          if($('#m_input').val()){
+            enable_button();
+          }
+          else{
+            disable_button();
+          }
+        })
+    });
+</script>
+{%endblock%}

@@ -1,0 +1,430 @@
+<!DOCTYPE html>
+{% load static %}
+<html data-wf-page="637ff64ff4e78619c83aab92" data-wf-site="63626e889c000076d7e390a0"
+lang="en">
+
+<head>
+    <title>Noto</title>
+    <meta content="width=device-width, initial-scale=1" name="viewport" />
+    <link rel="shortcut icon" href="{% static 'logo.png' %}" type="image/x-icon">
+    <script src="https://code.jquery.com/jquery-3.7.1.min.js" integrity="sha256-/JqT3SQfawRcv/BIHPThkBvs0OEvtFFmqPF/lYI/Cxo=" crossorigin="anonymous"></script>
+
+    <script src="https://unpkg.com/htmx.org@2.0.0/dist/htmx.js" integrity="sha384-Xh+GLLi0SMFPwtHQjT72aPG19QvKB8grnyRbYBNIdHWc2NkCrz65jlU7YrzO6qRp" crossorigin="anonymous"></script>
+    <script src="https://unpkg.com/htmx.org@1.9.12/dist/ext/ws.js"></script>
+    <script src="https://unpkg.com/htmx.org@2.0.0" integrity="sha384-wS5l5IKJBvK6sPTKa2WZ1js3d947pvWXbPJ1OmWfEuxLgeHcEbjUUA5i9V5ZkpCw" crossorigin="anonymous"></script>
+
+    <link href="https://assets-global.website-files.com/63626e889c000076d7e390a0/css/3ai.webflow.e9bb8f249.css"
+        rel="stylesheet" type="text/css" />
+
+
+
+    <style>
+        /* logos and menu items transitions setter */
+        img.logo-dark,
+        img.logo-white,
+        body.color .navigation-items a {
+            transition: 0.3s;
+        }
+
+        /* show/hide logos based on body class */
+        body.color img.logo-white,
+        body.white img.logo-dark {
+            opacity: 0 !important;
+        }
+
+        body.color img.logo-dark,
+        body.white img.logo-white {
+            opacity: 1 !important;
+        }
+
+        /* add custom cursor */
+        .typed-words::after {
+            content: "|";
+            display: inline;
+            animation: blink 1s infinite;
+        }
+
+        /* custom cursor animation */
+        @keyframes blink {
+            0% {
+                opacity: 1;
+            }
+
+            50% {
+                opacity: 0;
+            }
+
+            100% {
+                opacity: 1;
+            }
+        }
+
+        .hide-stuff{
+            display: flex;
+            flex-wrap: nowrap;  
+            justify-content: space-between; 
+            width: 130px;
+        }
+
+        .k-stuff{
+            display: flex;
+            flex-wrap: nowrap;  
+            justify-content: space-between; 
+            width: 120px;
+        }
+
+        .ss{
+            margin: 0 0 0 0;
+        }
+
+        @media(min-width: 984px){    
+            .hide-stuff{
+                display: none;
+            }
+            .hide-stusff{
+                display: none;
+            }
+        }
+
+        @media(max-width: 984px){    
+            .k-stuff{
+                display: none;
+            }
+        }
+
+        @media(min-width: 984px){    
+            .ss{
+                width: 90px;
+            }
+        }                
+    </style>
+
+</head>
+
+<body>
+
+    {% if messages %}
+    <ul class="messages" style="display: none;">
+        {% for message in messages %}
+        <li {% if message.tags %} class="{{ message.tags }} mess"{% endif %} >{{ message }}</li>
+        {% endfor %}
+    </ul>
+    {% endif %}
+
+    <div data-collapse="medium" data-animation="default" data-duration="400"
+    data-w-id="8ac719c2-df89-fbde-ca13-a7362062ab87" data-easing="ease" data-easing2="ease" role="banner"
+    class="c-nav w-nav" style="margin-bottom:0;">
+    
+    <div class="c-con c-nav-con">
+        <div class="c-menumobile_wrap">
+            
+            <div class="ss" style="display: flex; width: 100px; justify-content: space-between;">
+                <a href="/" style="flex-basis: 60%; margin-top: 5px;">
+                <img src="{% static 'logo.png'%}"
+                    width="40px" alt="logo" />
+                </a>
+                <span class="ss" style="margin-top: 8px;">
+                    {%block button%}
+                    {%endblock%}
+                </span>
+            </div>
+
+            <div class="">  
+                <div class="" style=" display: flex; justify-content: space-between;">
+                {%if request.user.is_authenticated%}
+                    <div class="hide-stuff">
+                        
+                        <span class="see_count" style="position: relative; width: 20px; height:20px; background-color: red; text-align: center; border-radius: 50%; left: 20px; bottom: 10px;;"></span> 
+                        <img width="28px" id="bell_btns" src="{%static 'bell.png'%}" alt=""  style="cursor: pointer;">
+                        
+                        <style>
+                            .notifications{width: 300px;position: absolute;border-radius: 5px 0px 5px 5px;background-color: #fff;box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19); }
+                            .notifications h2{font-size: 14px;padding: 10px;border-bottom: 1px solid #eee;color: #999}
+                            .notifications h2 span{color: #f00}
+                            .notifications-item{display: flex;border-bottom: 1px solid #eee;padding: 6px 9px;margin-bottom: 0px;}
+                            .notifications-item img{display: block;width: 50px;height: 50px;margin-right: 9px;border-radius: 50%;margin-top: 2px}
+                            .notifications-item .text h4{color: #777;font-size: 16px;margin-top: 3px}
+                            .notifications-item .text p{color: #aaa;font-size: 12px}
+                                                    
+                        </style>
+                        
+                        <div class="notifications" style="top: 120px;right: 63px;" id="box" hx-get="/start_not/" hx-trigger="every 10s" hx-target="#boxs">   
+                            {%include 'notifications.html'%}
+                        </div>
+
+                        <script> 
+                            $('.see_count').hide();
+                            $('#box').hide();
+                            down = false;
+                            $('#bell_btns').click(()=>{
+                                if(down){
+                                    $("#box").slideUp();
+                                    down = false;
+                                }
+                                else{
+                                    $("#box").slideDown();
+                                    down = true;    
+                                }
+                                
+                            });
+                        </script>
+
+                        <img width="28px"  src="{%static 'messages.png'%}" alt="" style="cursor: pointer;">
+                            {%if request.user.prof_image%}
+                            <div style="border-radius:50%;">
+                                <a href="/profile/{{request.user.username}}/" style="width: fit-content;">
+                                    <img src="/media/{{request.user.prof_image}}" class="kk"  style="overflow: hidden; border:3px solid green; border-radius: 50%; overflow: hidden; width:30px;height:30px;" alt="">
+                                </a>
+                            </div>
+                            {%else%}
+                            <div style="border-radius:50%;">
+                                <a href="/profile/{{request.user.username}}/" style="width: fit-content;">
+                                    <img src="{%static 'user.png'%}" class="kk"  style="overflow: hidden; border:3px solid green; border-radius: 50%; overflow: hidden; width:30px;height:30px;" alt="">
+                                </a>
+                            </div>
+                            {%endif%}
+                    </div>
+                {%else%}
+                    <div class="hide-stusff">
+                        <div style="border-radius:50%;">
+                            <a href="/login/">
+                                <img src="{%static 'user.png'%}"  style="overflow: hidden; border:3px solid red; border-radius: 50%; overflow: hidden; width:30px;height:30px;" alt="">
+                            </a>
+                        </div>
+                    </div>
+                {%endif%}
+                    <div class=" c-nav_burger w-nav-button">
+                        <div data-w-id="ce0caa50-096d-7e0f-876f-8bdb3461ec1d" class="b4-bar1"></div>
+                        <div data-w-id="ce0caa50-096d-7e0f-876f-8bdb3461ec1e" class="b4-bar-2"></div>
+                        <div data-w-id="ce0caa50-096d-7e0f-876f-8bdb3461ec1f" class="b4-bar3"></div>
+                    </div>
+                </div>   
+            </div>
+
+            <nav role="navigation" class="c-nav_menuwrap w-nav-menu">
+                <div class="c-menuwrap_con">
+                    
+                    <div data-hover="true" data-delay="0" class="dropdown w-dropdown">
+                        <div class="dropdown-toggle w-dropdown-toggle">
+                            <div class="c-drop_txt">Chats</div>
+                            <div class="c-dropicon_wrap"><img
+                                    src="https://assets-global.website-files.com/63626e889c000076d7e390a0/636393aeac4fa236b2154298_Arrow%202%20(Stroke).svg"
+                                    loading="lazy" alt="" class="c-drop_icon" /><img
+                                    src="https://assets-global.website-files.com/63626e889c000076d7e390a0/6367a8e7892c115c3c3cec98_Arrow%202%20(Stroke)%20(2).svg"
+                                    loading="lazy" alt="" class="c-drop_icon_white" /></div>
+                        </div>
+                        <nav class="navigation-dropdown w-dropdown-list">
+                            <a href="/chathome/{{request.user.username}}/" class="c-drop_link w-inline-block">
+                                <div class="c-droplink_txt">Text</div>
+                            </a><a href="/product-indices" class="c-drop_link w-inline-block">
+                                <div class="c-droplink_txt">Video</div>
+                            </a></nav>
+                    </div>
+                    <div data-hover="false" data-delay="0" class="dropdown-mobile w-dropdown">
+                        <div class="c-nav_link w-dropdown-toggle">
+                            <div>Chats</div>
+                        </div>
+                        <nav class="dropdown-list w-dropdown-list">
+                            <a href="/chathome/{{request.user.username}}/"
+                                class="c-drop_link w-inline-block">
+                                <div class="c-droplink_txt">Text</div>
+                            </a>
+                            <a href="/product-indices" class="c-drop_link w-inline-block">
+                                <div class="c-droplink_txt">Video</div>
+                            </a>
+                        </nav>
+                    </div>
+                        <a href="/search" class="c-nav_link w-nav-link">Explore</a>
+                        <a href="/resources"class="c-nav_link w-nav-link">Resources</a>
+                                            
+                        <div style="margin: 15px 20px 0 10px;">
+                            {%if request.user.is_authenticated%}
+                            <div class="k-stuff">
+                        
+                            <style>
+                                .notifications{width: 300px;position: absolute;top: 70px;right: 410px;border-radius: 5px 0px 5px 5px;background-color: #fff;box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19); height: fit-content;}
+                                .notifications h2{font-size: 14px;padding: 10px;border-bottom: 1px solid #eee;color: #999}
+                                .notifications h2 span{color: #f00}
+                                .notifications-item{display: flex;border-bottom: 1px solid #eee;padding: 6px 9px;margin-bottom: 0px;}
+                                .notifications-item img{display: block;width: 50px;height: 50px;margin-right: 9px;border-radius: 50%;margin-top: 2px}
+                                .notifications-item .text h4{color: #777;font-size: 16px;margin-top: 3px}
+                                .notifications-item .text p{color: #aaa;font-size: 12px}
+                                                            
+                            </style>
+                            <span class="see_count" style="position: relative; width: 20px; height:20px; background-color: red; text-align: center; border-radius: 50%; left: 20px; bottom: 10px;"></span> 
+                            <img width="28px" id="bell_btnss" src="{%static 'bell.png'%}" alt=""  style="cursor: pointer;">
+                            
+                            <div class="notifications" id="boxs">   
+                            </div>
+        
+                            <script> 
+                                    $('.see_count').hide();
+                                    $('#boxs').hide();
+                                    down = false;
+                                    $('#bell_btnss').click(()=>{
+                                        if(down){
+                                            $("#boxs").slideUp();
+                                            $('#boxs').html($('#box').html());
+                                            down = false;
+                                        }
+                                        else{
+                                            $("#boxs").slideDown();
+                                            down = true;    
+                                        }
+                                        
+                                    });
+                            </script>
+                            
+                            <img width="28px"  src="{%static 'messages.png'%}" alt="" style="cursor: pointer;">
+                            {%if request.user.prof_image%}
+                            <div style="border-radius:50%;">
+                                <a href="/profile/{{request.user.username}}/" style="width: fit-content;">
+                                    <img src="/media/{{request.user.prof_image}}" class="kk"  style="overflow: hidden; border:3px solid green; border-radius: 50%; overflow: hidden; width:30px;height:30px;" alt="">
+                                </a>
+                            </div>
+                            {%else%}
+                            <div>
+                                <a href="/profile/{{request.user.username}}/" style="width: fit-content;">
+                                    <img src="{%static 'user.png'%}" class="kk"  style="overflow: hidden; border:3px solid green; border-radius: 50%; overflow: hidden; width:30px;height:30px;" alt="">
+                                </a>
+                            </div>
+                            {%endif%}
+                            </div>
+                            {%else%}
+                            <div>
+                            <div style="border-radius:50%;">
+                                <a href="/profile/{{request.user.username}}/" style="width: fit-content;">
+                                    <img src="{%static 'user.png'%}" style="overflow: hidden; border:3px solid red; border-radius: 50%; overflow: hidden; width:30px;height:30px;" alt="">
+                                </a>
+                            </div>
+                            </div>
+                            {%endif%}
+                        
+                        </div>
+                    </div>
+                </div>
+            </nav>
+
+        </div>  
+    </div>
+
+    {%block content%}
+    {%endblock%}
+
+
+    <footer id="footer" data-w-id="50857fc8-e47f-1a05-dc6e-e442967620da" class="c-footer">
+        <div class="c-con c-footer-con">
+            <div class="c-norm_leftwrap c-footer_left"><a href="/" aria-current="page"
+                    class="c-footer_imglink w-inline-block w--current"><img
+                        src="{%static 'logo.png'%}"
+                        alt="" style="width: 100px;" /></a>
+                <div class="divider cc-foter"></div>
+                <div class="c-footer_div">
+                    <div class="c-footer_copyright">Copyright Â© 2024 NOTO LTD. All Rights Reserved.</div>
+                    <div class="c-sociallink_wrap"><a href="https://uk.linkedin.com/company/thirdai" target="_blank"
+                            class="c-footer_social">LinkedIn</a><a href="https://twitter.com/3ai_co" target="_blank"
+                            class="c-footer_social">Twitter</a></div>
+                </div>
+            </div>
+            <div class="c-footer_wrap">
+                <div class="c-footer_column cc-links"><a href="/careers" class="c-footer_link">Careers_</a><a
+                        href="/contact" class="c-footer_link">Contact_</a><a href="/privacy-policy"
+                        class="c-footer_link cc-nomargin">Legal_</a></div>
+                <div class="form-block w-form">
+                    <h3 class="c-form_head">Subscribe to our Newsletter*</h3>
+                    <form id="email-form" name="email-form" data-name="Email Form" method="get"
+                        data-wf-page-id="637ff64ff4e78619c83aab92"
+                        data-wf-element-id="4e538b08-16dd-1b33-200f-c023f6507b92"><input class="c-form_field w-input"
+                            maxlength="256" name="email" data-name="Email" placeholder="Email" type="email" id="email"
+                            required="" /><input type="submit" data-wait="Please wait..."
+                            class="btn c-form_btn cc-footer w-button" value="Sign Up" /></form>
+                    <div class="c-form_txt">*By signing up, you consent to receiving NOTO marketing emails.</div>
+                    <div class="success-message-2 w-form-done">
+                        <div>Thank you! Your submission has been received!</div>
+                    </div>
+                    <div class="error-message-2 w-form-fail">
+                        <div>Oops! Something went wrong while submitting the form.</div>
+                    </div>
+                </div>
+            </div>
+        </div><a href="#hero" class="c_backup_link w-inline-block"><img
+                src="https://assets-global.website-files.com/63626e889c000076d7e390a0/637e80a83bb75d8f224d1f32_arrow%20big.svg"
+                loading="lazy" alt="" class="image" /></a>
+    </footer>
+    
+    <script src="https://d3e54v103j8qbb.cloudfront.net/js/jquery-3.5.1.min.dc5e7f18c8.js?site=63626e889c000076d7e390a0"
+    type="text/javascript" integrity="sha256-9/aliU8dGd2tb6OSsuzixeV4y/faTqgFtohetphbbj0="
+    crossorigin="anonymous"></script>
+    
+    <script src="https://assets-global.website-files.com/63626e889c000076d7e390a0/js/webflow.8833453a8.js"
+    type="text/javascript"></script>
+    
+    <script>
+    /* Changing Colors and Logo by Section */
+    function checkSectionTheme() {
+        var pos = $(window).scrollTop() + 50; // current scroll position + margin to tune the change between sections
+
+        $('.theme-white, .theme-dark').each(function () {
+            var pos_top = $(this).position().top; // current section top scroll position
+            var pos_bottom = $(this).position().top + $(this).innerHeight(); // current section bottom scroll position
+            var class_name = ($(this).hasClass("theme-white")) ? "white" : "color"; // define class_name that will be added to body based on current section class (theme-white or theme-dark)
+
+            // if scroll position is between section top and bottom scroll positions add class_name to body element
+            // the colors and transition are defined in CSS at head code above
+            if (pos_top <= pos && pos_bottom > pos) {
+                if (class_name == "white") {
+                    $("body").removeClass("color");
+                } else {
+                    $("body").removeClass("white");
+                }
+                $("body").addClass(class_name);
+            }
+        });
+    }
+    // run function when document is loaded
+    $(document).ready(function () {
+        checkSectionTheme();
+    });
+    // also run when user makes scroll
+    $(window).scroll(function () {
+        checkSectionTheme();
+    });
+    </script>
+
+    <script>
+            $.ajax({
+                type: "get",
+                url: "/start_not/",
+                success: function (response) {
+                    console.log(response)
+                    $('.notifications').html(
+                        response
+                    )
+                    if(response){
+                        if($('.get_count').text()!=0){ 
+                            
+                            $('.see_count').text('');
+                            $('.see_count').text($('.get_count').html())
+                            $('.see_count').show();
+                        }
+                        if($('.get_count').text()==0){
+                            $('.see_count').hide();
+                        }
+                }
+            }
+            });
+    </script>
+    
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.js" integrity="sha512-VEd+nq25CkR676O+pLBnDW09R7VQX9Mdiij052gVCp5yVH3jGtH70Ho/UUv4mJDsEdTvqRCFZg0NKGiojGnUCw==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.css" integrity="sha512-3pIirOrwegjM6erE5gPSwkUzO+3cTjpnV9lexlNZqvupR64iZBnOOTiiLPb9M36zpMScbmUNIcHUqKD47M719g==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+    
+    <script>
+        const k = $('.mess').text();
+        if(k) {
+          $('.mess').hide()
+          toastr.info(`${k}`)
+        }
+    </script>
+
+</body>
+</html>

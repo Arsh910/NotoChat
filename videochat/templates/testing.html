@@ -1,0 +1,861 @@
+{%extends 'base.html'%}
+{% load static %}
+{%block content%}
+<script src="https://unpkg.com/htmx.org@1.9.12" integrity="sha384-ujb1lZYygJmzgSwoxRggbCHcjc0rB2XoQrxeTUQyRjrOnlCoYta87iKBWq3EsdM2" crossorigin="anonymous"></script>
+<script src="https://unpkg.com/htmx.org@1.9.12/dist/htmx.js" integrity="sha384-qbtR4rS9RrUMECUWDWM2+YGgN3U4V4ZncZ0BvUcg9FGct0jqXz3PUdVpU1p0yrXS" crossorigin="anonymous"></script>
+<script src="https://unpkg.com/htmx.org@1.9.12/dist/ext/ws.js"></script>
+<h1 style="font-size: 50px;text-align: center;">{{name}}</h1>
+<link rel= "stylesheet" type= "text/css" href= "{% static 'chat/css/chat.css'%}">
+
+<style>
+#sidebars {
+  min-width: fit-content;
+  max-width: fit-content;
+  color: #fff;
+}
+
+@media (max-width: 991.98px) {
+    #sidebars {
+      min-width: 100%;
+      max-width: 100%;
+      text-align: center;
+    }
+
+}
+  
+</style>
+
+<style>
+/* CSS */
+.button-23 {
+  background-color: #FFFFFF;
+  border: 1px solid #222222;
+  border-radius: 8px;
+  box-sizing: border-box;
+  color: #222222;
+  cursor: pointer;
+  display: inline-block;
+  font-family: Circular,-apple-system,BlinkMacSystemFont,Roboto,"Helvetica Neue",sans-serif;
+  font-size: 16px;
+  font-weight: 600;
+  line-height: 20px;
+  outline: none;
+  padding: 13px 23px;
+  text-align: center;
+  text-decoration: none;
+  touch-action: manipulation;
+  transition: box-shadow .2s,-ms-transform .1s,-webkit-transform .1s,transform .1s;
+  user-select: none;
+  -webkit-user-select: none;
+  width: auto;
+}
+
+.button-23:focus-visible {
+  box-shadow: #222222 0 0 0 2px, rgba(255, 255, 255, 0.8) 0 0 0 4px;
+  transition: box-shadow .2s;
+}
+
+.button-23:active {
+  background-color: #F7F7F7;
+  border-color: #000000;
+  transform: scale(.96);
+}
+
+.button-23:disabled {
+  border-color: #DDDDDD;
+  color: #DDDDDD;
+  cursor: not-allowed;
+  opacity: 1;
+}
+</style>
+
+<style>
+    #me, #chat, #other {
+        transition: flex-basis 0.5s ease;
+    }
+
+    .expand {
+        flex-basis: 33.3% !important;
+    }
+
+
+    .compress {
+        flex-basis: 33.3% !important;
+    }
+
+    .flex-container {
+        display: flex;
+        flex-wrap: nowrap;
+        justify-content: stretch;
+        height: 100vh;
+    }
+
+    #me {
+        order: 1;
+        background-color: black;
+    }
+
+    #chat {
+        order: 2;
+        background-color: grey;
+        flex-basis: 0;
+    }
+
+    #other {
+        order: 3;
+        background-color: orange;
+    }
+
+
+    #other_vi{
+        margin: 140px 10px 0 10px;
+    }
+
+    #boxxes{
+        width: 0;
+    }
+
+    .boxes{
+        width: 100%;
+    }
+
+
+</style>
+
+<style>
+
+    #large{
+         display: block;
+    }
+    #small{
+        display: none;
+    }
+
+    @media(max-width: 984px){    
+        #large{
+            display: none;
+        }
+        #small{
+            display: block;
+        }
+        #chats{
+        width:0;
+        transition: width 0.5s ease;
+        }
+    }
+</style>
+
+<style>
+    .loader {
+  position: relative;
+  width: 54px;
+  height: 54px;
+  border-radius: 10px;
+}
+
+.loader div {
+  width: 8%;
+  height: 24%;
+  background: rgb(128, 128, 128);
+  position: absolute;
+  left: 50%;
+  top: 30%;
+  opacity: 0;
+  border-radius: 50px;
+  box-shadow: 0 0 3px rgba(0,0,0,0.2);
+  animation: fade458 1s linear infinite;
+}
+
+@keyframes fade458 {
+  from {
+    opacity: 1;
+  }
+
+  to {
+    opacity: 0.25;
+  }
+}
+
+.loader .bar1 {
+  transform: rotate(0deg) translate(0, -130%);
+  animation-delay: 0s;
+}
+
+.loader .bar2 {
+  transform: rotate(30deg) translate(0, -130%);
+  animation-delay: -1.1s;
+}
+
+.loader .bar3 {
+  transform: rotate(60deg) translate(0, -130%);
+  animation-delay: -1s;
+}
+
+.loader .bar4 {
+  transform: rotate(90deg) translate(0, -130%);
+  animation-delay: -0.9s;
+}
+
+.loader .bar5 {
+  transform: rotate(120deg) translate(0, -130%);
+  animation-delay: -0.8s;
+}
+
+.loader .bar6 {
+  transform: rotate(150deg) translate(0, -130%);
+  animation-delay: -0.7s;
+}
+
+.loader .bar7 {
+  transform: rotate(180deg) translate(0, -130%);
+  animation-delay: -0.6s;
+}
+
+.loader .bar8 {
+  transform: rotate(210deg) translate(0, -130%);
+  animation-delay: -0.5s;
+}
+
+.loader .bar9 {
+  transform: rotate(240deg) translate(0, -130%);
+  animation-delay: -0.4s;
+}
+
+.loader .bar10 {
+  transform: rotate(270deg) translate(0, -130%);
+  animation-delay: -0.3s;
+}
+
+.loader .bar11 {
+  transform: rotate(300deg) translate(0, -130%);
+  animation-delay: -0.2s;
+}
+
+.loader .bar12 {
+  transform: rotate(330deg) translate(0, -130%);
+  animation-delay: -0.1s;
+}
+
+</style>
+
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+
+<div id="large">
+    <div class="flex-container">
+    <div id="me" style="flex-basis: 50%;" >
+        <div style="border: 10px solid lightblue; border-radius: 20px; height: fit-content; margin: 140px 10px 0 10px;">
+            <video width="100%" id="ours" src="" autoplay muted></video>
+        </div>
+    </div>
+
+    <div id="chat" style="flex-basis: 0;">
+        <div class="chat-section" style="padding: 0;">
+            <div class="main-block" style="padding: 0;  margin-top: 150px;">
+                <div class="d-flex flex-column" style="height: 70vh;">
+                            {% for data in mesg reversed%}
+                            {%include 'chatmess.html'%}
+                            {%endfor%}
+                </div>
+                <div class="send-message-container" style="margin:0;" id="forrm">
+                  <form action="" style=" width: 100%;display: flex; justify-content: space-between;" hx-ext="ws" 
+                  ws-connect=""   
+                  ws-send 
+                  _=" on htmx:wsAfterSend reset() me" >
+                  {% csrf_token %}
+                    <input id="m_input" class="message-input"  name="message" type="text" placeholder="Add message ..." width="100%">
+                    <button id="my_button" type="submit" style="flex-basis: 20%; border-radius: 10px;" class="bg-blue-500 text-white font-bold py-2 px-4 border-b-4 border-blue-700 ">Send</button>
+                  </form>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div id="other" style="flex-basis: 50%; overflow: scroll; overflow-x: hidden;scrollbar-width: none;">
+        <div  id="other_vi" style="border: 10px solid white; border-radius: 20px; height: fit-content;">
+            <video width="100%" id="remote" src="" autoplay></video>
+            <span id="ll">
+                <div class="loader">
+                    <div class="bar1"></div>
+                    <div class="bar2"></div>
+                    <div class="bar3"></div>
+                    <div class="bar4"></div>
+                    <div class="bar5"></div>
+                    <div class="bar6"></div>
+                    <div class="bar7"></div>
+                    <div class="bar8"></div>
+                    <div class="bar9"></div>
+                    <div class="bar10"></div>
+                    <div class="bar11"></div>
+                    <div class="bar12"></div>
+                </div>
+            </span>
+        </div>
+        <div style="margin: 60px auto 20px auto; justify-content: space-around; display: flex;">
+            <button class="button-23" type="button" id="chat_btn">Chat</button>
+            <button class="button-23" type="button" id="call" style="background-color: lightblue;">Submit</button>
+            <button class="button-23" type="button" id="cancel" style="background-color: red;">Cancel</button>
+        </div>
+    </div>
+
+
+    </div>
+
+</div>
+
+
+<div id="small">
+    <div class="flex-container" style="width: 100%; display: flex;" >
+    
+    <div id="me" style="height: 100vh; flex-basis: 100%; overflow: scroll; overflow-x: hidden;scrollbar-width: none;">
+        <div style="border: 10px solid lightblue; border-radius: 20px;  margin: 140px 10px 0 10px; height: fit-content;">
+            <video width="100%"   id="ourss" src="" autoplay muted></video>
+        </div>
+        <div  style="border: 10px solid white; border-radius: 20px;  margin: 10px 10px 0 10px; height: fit-content;">
+            <video width="100%"  id="remotes" src="" autoplay></video>
+            <span id="l">
+                <div class="loader">
+                    <div class="bar1"></div>
+                    <div class="bar2"></div>
+                    <div class="bar3"></div>
+                    <div class="bar4"></div>
+                    <div class="bar5"></div>
+                    <div class="bar6"></div>
+                    <div class="bar7"></div>
+                    <div class="bar8"></div>
+                    <div class="bar9"></div>
+                    <div class="bar10"></div>
+                    <div class="bar11"></div>
+                    <div class="bar12"></div>
+                </div>
+            </span>
+        </div>
+
+        <div style="margin: 60px auto 0 auto; justify-content: space-around; display: flex;">
+            <button class="button-23" type="button" id="chat_btns">Chat</button>
+            <button class="button-23" type="button" id="calls" style="background-color: lightblue;">Submit</button>
+            <button class="button-23" type="button" id="cancels" style="background-color: red;">Cancel</button>
+            <!-- <button class="button-23" type="button" id="mute" style="background-color: red;">Mute</button> -->
+        </div>
+        <br>
+    </div>
+
+     <div id="chats" style="height: 100vh; position: absolute; right:0;">
+            <div class="chat-section">
+                <div class="main-block" style="padding: 0;">
+                    <div class="d-flex flex-column" style="height: 85vh;">
+                                {% for data in mesg reversed%}
+                                {%include 'chatmess.html'%}
+                                {%endfor%}
+                    </div>
+                    <div class="send-message-container" style="margin:0;" id="forrms">
+                      <form action="" style="display: flex; justify-content: space-between;">
+                      {% csrf_token %}
+                        <input id="m_input" class="message-input"  name="message" type="text" placeholder="Add message ..." width="100%">
+                        <button id="my_button" type="submit" style="flex-basis: 30%; border-radius: 10px;" class="bg-blue-500 text-white font-bold py-2 px-4 border-b-4 border-blue-700 ">Send</button>
+                      </form>
+                    </div>
+                </div>
+            </div>
+      </div>
+    </div>
+
+</div>
+
+
+
+<script>
+    $('#chat_btns').hide();
+    $('#chat_btn').hide();
+</script>
+<script>
+    ds = true;
+    $('#forrm').hide();
+    $('#chat_btn').click(()=>{
+        $('#me').toggleClass("expand");
+        $('#other').toggleClass("expand");
+        $('#chat').toggleClass("compress");
+        if(ds){
+            $('#forrm').show(); 
+            ds = false;
+        }
+        else{
+            setTimeout(()=>{
+            $('#forrm').hide();
+             },300)
+            ds = true;
+        } 
+    });
+
+
+</script>
+
+<script>
+    dss = true
+    $('#chats').hide();
+    $('#chat_btns').click(()=>{ 
+    if(dss){
+            $('#chats').show();
+            $('#chats').css('width','50vw');
+            dss = false;
+        }
+    else{
+            $('#chats').css('width',0);
+            setTimeout(()=>{
+                $('#chats').hide();
+            },300)
+            dss = true;
+        } 
+    })
+</script>
+
+<script>
+
+let ws = new WebSocket('ws://172.16.166.219:8000/ws/omegle/{{ request.user }}/');
+
+let selected;
+let other_cancel;
+
+const our_video = document.getElementById("ours");
+const our_videos = document.getElementById("ourss");
+const remote_video = document.getElementById("remote");
+const remote_videos = document.getElementById("remotes");
+const call_button = document.getElementById("call");
+const cancel_button = document.getElementById("cancel");
+const call_buttons = document.getElementById("calls");
+const cancel_buttons = document.getElementById("cancels");
+
+let sub = 0;
+let subs = 0;
+
+let checks ;
+let checkss ;
+
+let my_timer;
+let my_timers;
+
+let stream;
+let rtc_peer_connection;
+const created = "{{created}}";
+const room = "{{name}}";
+let isCreated ='{{request.user}}';
+let iceCandidatesQueue = [];
+let isnotCreated ='{{request.user.id}}';
+
+$('#l').hide();
+$('#ll').hide();
+
+ws.onopen = () => {
+    console.log("connected to Noto socket");
+    ws.send(
+        JSON.stringify({
+            command: "join_room",
+            room :'omegle'
+        })
+    );
+
+
+    
+    navigator.mediaDevices.getUserMedia({ video: true, audio: true })
+        .then((s) => {
+            stream = s;
+            const audioTracks = stream.getAudioTracks();
+            audioTracks.forEach(track => track.enabled = false);
+
+            our_video.srcObject = s; 
+            our_video.onloadeddata = () => { our_video.play(); }});
+
+
+
+    if (created == "created" || created == "join" && isCreated == '{{auname}}') {
+        navigator.mediaDevices
+            .getUserMedia({
+                video: true,
+                audio: true,
+            })
+            .then((s) => {
+                stream = s;
+                our_video.srcObject = s;
+                our_videos.srcObject = s;
+                our_video.onloadeddata = () => {
+                    our_video.play();
+                    our_videos.play();
+                };
+            });
+        // console.log(isCreated);
+    } 
+
+    else {
+        navigator.mediaDevices
+            .getUserMedia({
+                video: true,
+                audio: true,
+            })
+            .then((s) => {
+                stream = s;
+                our_video.srcObject = s;
+                our_videos.srcObject = s;
+                our_video.onloadeddata = () => {
+                    our_video.play();
+                    our_videos.play();
+                };
+                ws.send(
+                    JSON.stringify({
+                        command: "join",
+                        room: room,
+                    })
+                );
+            });
+        // // console.log(isCreated);
+    }
+};
+
+ws.onmessage = (e) => {
+    
+    const data = JSON.parse(e.data);
+
+    if (data['command'] == 'b_offer'){
+        if(data['my_id'] != '{{request.user.id}}'){
+        // console.log(data);
+        // console.log("{{request.user.id}} offer recieved");
+            if(data['selected'] == '{{request.user.id}}' && data['my_id'] == selected  && subs == 1 && sub == 1){
+                other_cancel = selected;
+                console.log('connected with somebody');
+                clearInterval(my_timer);
+                clearInterval(my_timers);
+                $('#chat_btns').show();
+                $('#chat_btn').show();
+                checks = 0;
+                checkss = 0;
+                $('#l').hide();
+                $('#ll').hide();
+                const offer = new RTCSessionDescription(data['offer']);
+                createanswer(offer);
+            }
+            else{
+                iceCandidatesQueue = [];
+            }
+        }
+        else{
+            iceCandidatesQueue = [];
+        }
+    }
+
+    else if (data['command'] == 'answer' && data['my_id'] == selected && data['selected'] == '{{request.user.id}}' && sub ==1 && subs ==1){      
+            sub = '{{request.user.id}}'
+            console.log('connected with somebody');
+            checks = 0;
+            checkss = 0;
+            clearInterval(my_timer);
+            clearInterval(my_timers);
+            $('#l').hide();
+            $('#ll').hide();
+            $('#chat_btns').show();
+            $('#chat_btn').show();
+            // // console.log("{{request.user.id}} recieved answer")
+            rtc_peer_connection.setRemoteDescription(new RTCSessionDescription(data['answer']))
+                .then(() => {
+                    // console.log('answer recieved');
+                    processIceCandidatesQueue();
+                    // // console.log(iceCandidatesQueue); 
+                })
+                .catch((error) => {
+                    console.error("Error setting remote description:", error);
+                });
+    }
+
+    else if (data['command'] == 'candidate') {
+        // // console.log('recieved candiate')
+        // if(sub==1 && subs==1){
+        const candidate = new RTCIceCandidate(data['candidate']);
+        if (rtc_peer_connection.remoteDescription && rtc_peer_connection.remoteDescription.type){
+            rtc_peer_connection.addIceCandidate(candidate)
+                .catch((error) => {
+                    console.error("Error adding ICE candidate:", error);
+                });
+            }
+        // } 
+        // else {
+        //     iceCandidatesQueue.push(candidate);
+        //     // console.log(iceCandidatesQueue);
+        // }
+        else {
+            iceCandidatesQueue.push(candidate);
+        }
+    }
+
+    else if (data['command'] == 'cancel' && remote_video.srcObject!=null) {
+        // // console.log(data['me'],data['other'],"recieving");
+        
+        // // console.log("{{request.user.id}} recieved cancel")
+        // // console.log(data['me'],data['other'])
+
+        if(data['other'] == selected && data['me'] == '{{request.user.id}}'){
+            
+            // // console.log(sub,subs,"recieving");
+            
+            remote_video.srcObject = null;
+            remote_videos.srcObject = null;
+
+            cancel_button.style.display = 'none';
+            call_button.style.display = 'block';
+            sub = 0;
+            subs = 0;
+            cancel_buttons.style.display = 'none';
+            call_buttons.style.display = 'block';
+            selected = null;
+            // console.log(iceCandidatesQueue);
+            iceCandidatesQueue = [];
+            checks = 1
+            checkss = 1
+            clearInterval(my_timer);
+            clearInterval(my_timers);
+            $('#chat_btns').hide();
+            $('#chat_btn').hide();
+        }
+        if(data['me'] == selected && data['other'] == '{{request.user.id}}' ){
+            // // console.log(sub,subs,"recieving");
+            
+            remote_video.srcObject = null;
+            remote_videos.srcObject = null;
+
+            cancel_button.style.display = 'none';
+            call_button.style.display = 'block';
+            sub = 0;
+            subs = 0;
+            cancel_buttons.style.display = 'none';
+            call_buttons.style.display = 'block';
+            // console.log(iceCandidatesQueue);
+            iceCandidatesQueue = [];
+            checks = 1
+            checkss = 1
+            clearInterval(my_timer);
+            clearInterval(my_timers);
+            $('#chat_btns').hide();
+            $('#chat_btn').hide();
+        }
+}
+
+    // // console.log(data['other'],data['me']);
+
+};
+
+function getRandomIntExcluding(min, max, exclude) {
+    let randomNumber;
+    do {
+        randomNumber = Math.floor(Math.random() * (max - min + 1)) + min;
+    } while (randomNumber === exclude);
+    return randomNumber;
+}
+
+// // console.log(sub,subs,"out");
+
+call_button.onclick = () => {
+
+    sub = 1;
+    subs = 1;
+    $('#l').show();
+    $('#ll').show();
+    // // console.log(sub,subs);
+    call_button.style.display = 'none';
+    cancel_button.style.display = 'block';
+    call_buttons.style.display = 'none';
+    cancel_buttons.style.display = 'block';
+    checks = 1;
+    if(checks==1){
+        my_timer = setInterval(()=>{
+            selected = getRandomIntExcluding(1,4,'{{request.user.id}}');
+            createoffer(selected);
+        },2000)
+    }
+};
+
+cancel_button.onclick = () => {
+
+    // console.log(sub,subs);
+    // console.log(sub,subs,"sending");
+    cancel();
+
+    $('#l').hide();
+    $('#ll').hide();
+    $('#chat_btns').hide();
+    $('#chat_btn').hide();
+    clearInterval(my_timer);
+    clearInterval(my_timers);
+    cancel_button.style.display = 'none';
+    call_button.style.display = 'block';
+    cancel_buttons.style.display = 'none';
+    call_buttons.style.display = 'block';
+    remote_video.srcObject = null;
+    remote_videos.srcObject = null;
+    selected = null;
+
+};
+
+
+call_buttons.onclick = () =>{
+
+    sub = 1;
+    subs = 1;
+
+    // // console.log(sub,subs);
+    $('#l').show();
+    $('#ll').show();
+    call_buttons.style.display = 'none';
+    cancel_buttons.style.display = 'block';
+    call_button.style.display = 'none';
+    cancel_button.style.display = 'block';  
+    checkss = 1;
+    if(checkss==1){
+        my_timers = setInterval(()=>{
+            selected = getRandomIntExcluding(1,4,'{{request.user.id}}');
+            createoffer(selected);
+        },2000)
+    }
+};
+
+
+cancel_buttons.onclick = () => {
+  
+    cancel();
+    // console.log(sub,subs,"sending");
+    // console.log('cancelling');
+    $('#l').hide();
+    $('#ll').hide();
+    $('#chat_btns').hide();
+    $('#chat_btn').hide();
+    clearInterval(my_timer);
+    clearInterval(my_timers);
+    cancel_buttons.style.display = 'none';
+    call_buttons.style.display = 'block';
+    cancel_button.style.display = 'none';
+    call_button.style.display = 'block';
+    remote_video.srcObject = null;
+    remote_videos.srcObject = null;
+    selected = null;
+
+};
+
+
+function cancel() { 
+    console.log("cancelled");
+    ws.send(
+        JSON.stringify({
+            command: 'cancel',
+            room: 'omegle',
+            to : selected,
+            from : '{{request.user.id}}'
+        })
+    );
+    
+}
+
+
+let iceServers = {
+    iceServers: [
+        { urls: "stun:stun.services.mozilla.com" },
+        { urls: "stun:stun.l.google.com:19302" },
+    ],
+};
+
+
+function createoffer(selected) {
+
+    // console.log("offer started");
+    // console.log(iceCandidatesQueue);
+    rtc_peer_connection = new RTCPeerConnection(iceServers);
+    rtc_peer_connection.onicecandidate = OnIceCandidateFunc;
+    rtc_peer_connection.ontrack = OnTrackFunc;
+    stream.getTracks().forEach((track) => {
+        rtc_peer_connection.addTrack(track, stream);
+    });
+    rtc_peer_connection.createOffer()
+    .then((offer) => {
+        rtc_peer_connection.setLocalDescription(offer);
+        ws.send(
+        JSON.stringify({
+            command:'b_offer',
+            my_id :'{{request.user.id}}',
+            offer: offer,
+            room :'omegle',
+            selected :selected
+        })
+    )
+    });
+    
+}
+
+
+function createanswer(offer){
+
+    // console.log("answer started");
+    rtc_peer_connection = new RTCPeerConnection(iceServers);
+    rtc_peer_connection.onicecandidate = OnIceCandidateFunc;
+    rtc_peer_connection.ontrack = OnTrackFunc;
+    stream.getTracks().forEach((track) => {
+        rtc_peer_connection.addTrack(track, stream);
+    });
+    rtc_peer_connection.setRemoteDescription(offer)
+        .then(() => {
+            return rtc_peer_connection.createAnswer();
+        })
+        .then((answer) => {
+            return rtc_peer_connection.setLocalDescription(answer);
+        })
+        .then(() => {
+            ws.send(
+                JSON.stringify({
+                    command:'answer',
+                    answer: rtc_peer_connection.localDescription,
+                    room :'omegle',
+                    selected :selected,
+                    my_id:'{{request.user.id}}'
+                })
+            );
+            processIceCandidatesQueue();
+            // console.log(iceCandidatesQueue);
+        })
+
+}
+
+
+function processIceCandidatesQueue() {
+
+    while (iceCandidatesQueue.length > 0) 
+    {
+        const candidate = iceCandidatesQueue.shift();
+        rtc_peer_connection.addIceCandidate(candidate)
+            .catch((error) => {
+                console.error("Error adding ICE candidate from queue:", error);
+            });
+    }
+
+}
+
+function OnIceCandidateFunc(e) {
+
+    if (e.candidate) {
+        ws.send(
+            JSON.stringify({
+                command: "candidate",
+                candidate: e.candidate,
+                room: 'omegle',
+            })
+        );
+    }
+
+}
+
+function OnTrackFunc(e) {
+
+    remote_video.srcObject = e.streams[0];
+    remote_videos.srcObject = e.streams[0];
+    remote_video.onloadedmetadata = () => {
+        remote_video.play();
+        remote_videos.play();
+    };
+
+}
+
+</script>
+
+{%endblock%}

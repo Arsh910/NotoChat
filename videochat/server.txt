@@ -1,0 +1,77 @@
+if command == "join_room":
+
+            async_to_sync(self.channel_layer.group_add)(
+                self.videoroom_name_sanitized,self.channel_name
+            )
+elif command == "join":
+            
+            event = {
+                'type':'join_message_handler',
+            }
+
+            async_to_sync(self.channel_layer.group_send)(
+                self.videoroom_name_sanitized,event
+            )
+elif command == 'offer':
+
+            event = {
+                'type':'offer_message_handler',
+                'offer': text_data_dict.get('offer'),
+                'is_created': text_data_dict.get('is_created')
+            }
+            
+            async_to_sync(self.channel_layer.group_send)(
+                self.videoroom_name_sanitized,event
+            )
+
+elif command == 'answer':
+
+            event = {
+                'type':'answer_message_handler',
+                'answer': text_data_dict.get('answer'),
+                'is_created': text_data_dict.get('is_created')
+            }
+            
+            async_to_sync(self.channel_layer.group_send)(
+                self.videoroom_name_sanitized,event
+            )
+
+elif command == 'candidate':
+
+            event = {
+                'type':'candidate_message_handler',
+                'candidate': text_data_dict.get('candidate'),
+                'is_created': text_data_dict.get('is_created')
+            }
+            
+            async_to_sync(self.channel_layer.group_send)(
+                self.videoroom_name_sanitized,event
+            )
+        
+    
+def join_message_handler(self,event):
+        self.send(json.dumps({
+            'command':'join'
+
+        }))
+
+def offer_message_handler(self,event):
+        self.send(json.dumps({
+            'command':'offer',
+            'offer':event['offer'],
+            'is_created':event['is_created']
+        }))
+    
+def answer_message_handler(self,event):
+        self.send(json.dumps({
+            'command':'answer',
+            'answer' : event['answer'],
+            'is_created':event['is_created']
+        }))
+
+def candidate_message_handler(self,event):
+        self.send(json.dumps({
+            'command':'candidate',
+            'candidate' : event['candidate'],
+            'is_created': event['is_created'],
+        }))

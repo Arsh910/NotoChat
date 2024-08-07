@@ -1,0 +1,76 @@
+
+<h2>Notifications
+    <span class="get_count">{{length}}</span> 
+    {%if length == 0%}
+    <script>
+        $('.see_count').hide();
+    </script>
+    {%else%}
+    <script>
+        $('.see_count').text('');
+        $('.see_count').text($('.get_count').html());
+        $('.see_count').show();
+    </script>
+    {%endif%}
+</h2>
+{%for c in data%}
+<div class="notifications-item" class="notify_{{c.username}}"> <img src="{{c.photo}}" style="cursor: pointer" alt="img">
+    <div class="text">
+        <h4>{{c.username}}</h4>
+        <p>wants to be friends</p>
+    </div>
+    <style>
+        #accept_btn:hover{
+            background-color: blue;
+        }
+        #decline_btn:hover{
+            background-color: red;
+        }
+    </style>
+    
+    <div style="margin: 0 0 0 30px;">
+        <div style="margin: 5px;">
+            <button class="accept_btn_{{c.username}}" style="border-radius:10px; background-color: lightblue;">accept</button>
+        </div>
+        <div style="margin: 5px;">
+            <button class="decline_btn_{{c.username}}" type="button" style="border-radius:10px; border: 2px solid red;">decline</button>
+        </form>
+      </div>
+    </div>
+</div>
+<script>
+payload = {
+            'csrfmiddlewaretoken' : '{{csrf_token}}',
+  }
+
+$('.accept_btn_{{c.username}}').click(function() {
+    $.ajax({
+      type: "POST",
+      url: "/accept_follow/{{c.username}}/",
+      data: payload,
+      dataType: "json",
+      success: function (response) {
+        console.log(response);
+        $('.notify_{{c.username}}').hide();
+        toastr.info(`${response}`);
+      }
+    });
+  
+  });
+
+  $('.decline_btn_{{c.username}}').click(function(){ 
+    $.ajax({
+      type: "POST",
+      url: "/decline_follow/{{c.username}}/",
+      data: payload,
+      dataType: "json",
+      success: function (response){
+        console.log(response);
+        $('.notify_{{c.username}}').hide();
+        toastr.info(`${response}`);
+      }
+    });
+  });
+  
+</script>
+{%endfor%}

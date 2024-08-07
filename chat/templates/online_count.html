@@ -1,0 +1,9 @@
+
+<span id="online-count" style="font-size: 20px;"  hx-swap-oob="outerHTML" class="fade-in-scale">
+    {{count}}
+</span>
+{%if count %}
+<div id="online-icon" style="height: 10px; width: 10px; border-radius:50%; background-color: green;"></div>
+{% else %}
+<div id="online-icon" style="height: 10px; width: 10px; border-radius:50%; background-color: red;"></div>
+{% endif %}

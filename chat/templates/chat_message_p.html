@@ -1,0 +1,20 @@
+<div id="chats" hx-swap-oob="beforeend" class="fade-in">
+<script src="https://code.jquery.com/jquery-3.7.1.min.js" integrity="sha256-/JqT3SQfawRcv/BIHPThkBvs0OEvtFFmqPF/lYI/Cxo=" crossorigin="anonymous"></script>
+{%include 'chatmess.html'%}
+<script>
+
+       
+    $('#m_input').val('');
+
+
+    function scrollToBottom() {
+        var $chatContainer = $('#chats');
+        $chatContainer.scrollTop($chatContainer[0].scrollHeight);
+    }
+
+    $(document).ready(function () {  
+        scrollToBottom();
+    });
+
+</script>
+</div>

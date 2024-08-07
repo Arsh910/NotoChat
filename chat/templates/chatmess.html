@@ -1,0 +1,49 @@
+{%if data.author == user%}
+<script src="https://cdn.tailwindcss.com"></script>
+    
+    <div class="chatbubble chatbubble-right" style="margin: 10px; background-color: orange;">
+        {%if data.body%}
+            <p style="color: black;">{{data.body}}</p> 
+            <span style="font-size: 10px; margin: 0 0 0 auto; color: white;">{{data.created.time}}</span>
+        {%endif%}
+        {%if data.file%}
+            {%if data.file.is_image%}
+            <img src="/media/{{data.file}}" alt="">
+            {%else%}
+            <a href="/media/{{data.file}}">Download {{data.file}}</a>
+            {%endif%}
+        {%endif%}
+    </div> 
+
+
+{%else%}
+        
+        <div style="display: flex; justify-items: end; width: fit-content;">
+
+        <div class="flex items-end mr-2" >
+            <a href="/profile/{{data.author.username}}">
+                <img src="/media/{{data.author.prof_image}}"  style="overflow: hidden; border:3px solid red; border-radius: 50%; overflow: hidden; width:40px;height:40px; margin: 0 auto 0 auto;" alt="">
+            </a>
+        </div>
+
+        <div class="text-sm font-light mt-3">
+            <span class="text-white" style="width: 100%; text-align: center;">@{{data.author.username}}</span>
+        </div>
+        </div>
+        
+        <div class="chatbubble chatbubble-left" style="margin: 10px;">
+            {%if data.body%}
+                <p>{{data.body}}</p> 
+                <span style="font-size: 10px; margin: 0 0 0 auto; color: white;">{{data.created.time}}</span>
+            {%endif%}
+            {%if data.file%}
+                {%if data.file.is_image%}
+                <img src="/media/{{data.file}}" alt="">
+                {%else%}
+                <a href="/media/{{data.file}}">Download {{data.file}}</a>
+                {%endif%}
+            {%endif%}
+        </div> 
+    
+        
+{%endif%}
